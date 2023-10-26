@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -8,6 +9,16 @@ import (
 	"net/url"
 	"os"
 )
+
+// parse javascript object to golang struct
+// we need exported fileds so change lowercase to uppercase
+// so that fields are exported
+
+type Words struct {
+	Page  string   `json:"page"`
+	Input string   `json:"input"`
+	Words []string `json:"words"`
+}
 
 func main() {
 	args := os.Args
@@ -33,7 +44,18 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	if response.StatusCode != 200 {
+		fmt.Printf("Invalid output (HTTP code %d):%s\n", response.StatusCode, body)
+		os.Exit(1)
+	}
 
-	fmt.Printf("HTTP STatus code :%d\nBody: %s\n", response.StatusCode, string(body))
+	var words Words
 
+	// use json to unmarshal json to struct
+	err = json.Unmarshal(body, &words)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("JSON Parsed \nPage: %s \nWords :%s", words.Page, words.Words)
 }

@@ -16,12 +16,12 @@ func main() {
 	r := mux.NewRouter()
 
 	// Add a route for the get method to home
-	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Chad")
+	r.HandleFunc("/", func(writer http.ResponseWriter, reader *http.Request) {
+		fmt.Fprintf(writer, "Chad")
 	})
 
 	// Add a route for the get method
-	r.HandleFunc("/words", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/words", func(writer http.ResponseWriter, reader *http.Request) {
 		// create a new json object .
 		data := map[string]string{"page": "words", "input": args[1], "words": args[1]}
 
@@ -35,8 +35,8 @@ func main() {
 
 		// Write the JSON object to the response writer
 		// Respond with a JSON object with the status code 200 ok
-		w.WriteHeader((http.StatusOK))
-		w.Write(encodedData)
+		writer.WriteHeader((http.StatusOK))
+		writer.Write(encodedData)
 
 	})
 
