@@ -5,16 +5,23 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
 	// create a new router
 
 	args := os.Args
-	mux := http.NewServeMux()
+	r := mux.NewRouter()
+
+	// Add a route for the get method to home
+	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Chad")
+	})
 
 	// Add a route for the get method
-	mux.HandleFunc("/words", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/words", func(w http.ResponseWriter, r *http.Request) {
 		// create a new json object .
 		data := map[string]string{"page": "words", "input": args[1], "words": args[1]}
 
